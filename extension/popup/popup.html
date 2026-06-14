@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LeetCode → LinkedIn</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    width:380px;
+    font-family:Segoe UI,sans-serif;
+    background:#0d0d0d;
+    color:white;
+    padding:15px;
+}
+
+h1{
+    font-size:18px;
+    color:#f59e0b;
+    margin-bottom:4px;
+}
+
+.sub{
+    color:#888;
+    font-size:12px;
+    margin-bottom:20px;
+}
+
+.section{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    margin-bottom:5px;
+    color:#bbb;
+}
+
+input,
+select{
+    width:100%;
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #333;
+    background:#151515;
+    color:white;
+    margin-bottom:10px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.fetch-btn{
+    background:#f59e0b;
+    color:black;
+}
+
+.generate-btn{
+    background:#10b981;
+    color:black;
+}
+
+.linkedin-btn{
+    background:#0a66c2;
+    color:white;
+}
+
+.reset-btn{
+    background:#222;
+    color:#f87171;
+}
+
+.status{
+    margin-top:10px;
+    padding:10px;
+    border:1px solid #333;
+    border-radius:8px;
+    color:#aaa;
+    font-size:12px;
+}
+
+.screenshots{
+    margin-top:12px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.screenshot-box{
+    width:100px;
+    height:65px;
+    border:1px dashed #444;
+    border-radius:6px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#666;
+    font-size:10px;
+    text-align:center;
+}
+
+.post-preview{
+    margin-top:12px;
+    max-height:120px;
+    overflow:auto;
+    border:1px solid #333;
+    border-radius:8px;
+    padding:10px;
+    font-size:11px;
+    color:#ccc;
+    white-space:pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚡ LeetCode → LinkedIn</h1>
+<div class="sub">
+Generate LinkedIn posts from solved LeetCode problems
+</div>
+
+<div class="section">
+
+<label>Challenge</label>
+
+<select id="challengeType">
+    <option value="striver">Striver SDE Sheet</option>
+    <option value="blind75">Blind 75</option>
+    <option value="neetcode150">NeetCode 150</option>
+    <option value="custom">Custom</option>
+</select>
+
+<label>Day Number</label>
+<input type="number" id="dayNum" placeholder="Example: 4">
+
+<label>Total Days</label>
+<input type="number" id="totalDays" placeholder="Example: 45">
+
+</div>
+
+<div class="section">
+
+<label>Problem 1 Number</label>
+<input type="number" id="prob1" placeholder="Example: 1">
+
+<label>Problem 2 Number</label>
+<input type="number" id="prob2" placeholder="Example: 121">
+
+<label>Problem 3 Number</label>
+<input type="number" id="prob3" placeholder="Example: 217">
+
+<button id="btnFetch" class="fetch-btn">
+Fetch Problem Data
+</button>
+
+</div>
+
+<div class="status" id="statusBox">
+Enter problem numbers and click Fetch Problem Data.
+</div>
+
+<div class="section">
+
+<h3 style="margin-top:15px;margin-bottom:8px;">
+Captured Screenshots
+</h3>
+
+<div class="screenshots" id="screenshotsContainer">
+
+<div class="screenshot-box">
+Problem 1
+</div>
+
+<div class="screenshot-box">
+Problem 2
+</div>
+
+<div class="screenshot-box">
+Problem 3
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<button id="btnGenerate" class="generate-btn" disabled>
+Generate LinkedIn Post
+</button>
+
+<div id="postPreview" class="post-preview" style="display:none;">
+</div>
+
+<button id="btnLinkedIn" class="linkedin-btn" disabled>
+Fill LinkedIn Post
+</button>
+
+</div>
+
+<button id="btnReset" class="reset-btn">
+Reset All Data
+</button>
+
+<script src="popup.js"></script>
+
+</body>
+</html>

@@ -1,190 +1,582 @@
-// content/linkedin.js
-// Runs on LinkedIn pages and fills the post composer
+console.log("LINKEDIN JS LOADED");
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "FILL_LINKEDIN_POST") {
-    fillPost(message.post, message.screenshots)
-      .then(result => sendResponse(result))
-      .catch(err => sendResponse({ success: false, error: err.message }));
-    return true; // Keep channel open for async response
-  }
-});
 
-// ─── Main function to fill LinkedIn post ─────────────────────────────────────
-async function fillPost(postContent, screenshots) {
-  // Find the composer text area
-  const editor = await waitForElement(
-    '.ql-editor[contenteditable="true"], [data-placeholder="What do you want to talk about?"], .share-creation-state__placeholder',
-    8000
-  );
+chrome.runtime.onMessage.addListener(
 
-  if (!editor) {
-    // Try to open the post modal first
-    const startPostBtn = document.querySelector('[aria-label="Start a post"]') ||
-                         document.querySelector('button.share-box-feed-entry__trigger');
+async message=>{
 
-    if (startPostBtn) {
-      startPostBtn.click();
-      await sleep(2000);
+if(
 
-      const editorAfterClick = await waitForElement(
-        '.ql-editor[contenteditable="true"]',
-        5000
-      );
+message.type==="FILL_LINKEDIN_POST"
 
-      if (!editorAfterClick) {
-        return { success: false, error: "Could not find LinkedIn post editor" };
-      }
+){
 
-      await insertText(editorAfterClick, postContent);
-    } else {
-      return { success: false, error: "Please click 'Start a post' on LinkedIn first" };
-    }
-  } else {
-    await insertText(editor, postContent);
-  }
+console.log("FILLING POST");
 
-  // Upload screenshots if available
-  if (screenshots && screenshots.length > 0) {
-    await sleep(500);
-    await uploadScreenshots(screenshots);
-  }
 
-  showLinkedInToast("✅ Post filled by LeetCode Extension! Review and click Post.");
+const opened =
+await openPostModal();
 
-  return { success: true };
+
+if(!opened){
+
+console.log(
+
+"Cannot open modal"
+
+);
+
+return;
+
 }
 
-// ─── Insert text into LinkedIn's editor ──────────────────────────────────────
-async function insertText(editor, text) {
-  // Click to focus
-  editor.click();
-  editor.focus();
 
-  // Clear existing content
-  editor.innerHTML = "";
+const inserted =
+await fillPost(
 
-  // LinkedIn uses a Quill editor, we need to trigger proper input events
-  // Method 1: execCommand
-  try {
-    // Set focus
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(editor);
-    selection.removeAllRanges();
-    selection.addRange(range);
+message.post
 
-    // Insert line by line to preserve formatting
-    const lines = text.split("\n");
-    for (let i = 0; i < lines.length; i++) {
-      document.execCommand("insertText", false, lines[i]);
-      if (i < lines.length - 1) {
-        document.execCommand("insertParagraph", false);
-      }
-    }
+);
 
-    // Trigger events to make LinkedIn recognize the input
-    editor.dispatchEvent(new Event("input", { bubbles: true }));
-    editor.dispatchEvent(new Event("change", { bubbles: true }));
-    editor.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true }));
 
-    return true;
-  } catch (e) {
-    // Fallback: set innerHTML
-    editor.innerHTML = text.split("\n").map(line => `<p>${line || "<br>"}</p>`).join("");
-    editor.dispatchEvent(new Event("input", { bubbles: true }));
-    return true;
-  }
+if(!inserted){
+
+console.log(
+
+"Post insertion failed"
+
+);
+
+return;
+
 }
 
-// ─── Upload screenshots ───────────────────────────────────────────────────────
-async function uploadScreenshots(screenshots) {
-  // Find the image/media button in LinkedIn composer
-  const mediaBtn = document.querySelector('[aria-label*="image"], [aria-label*="media"], button[class*="media"]');
 
-  if (!mediaBtn) {
-    console.log("[Extension] Could not find media upload button");
-    return;
-  }
+console.log(
 
-  // Convert base64 screenshots to File objects and upload
-  for (const screenshotData of screenshots) {
-    try {
-      const blob = base64ToBlob(screenshotData, "image/png");
-      const file = new File([blob], "leetcode-solution.png", { type: "image/png" });
+"Post inserted"
 
-      // LinkedIn's file input
-      const fileInput = document.querySelector('input[type="file"][accept*="image"]');
-      if (fileInput) {
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        fileInput.files = dataTransfer.files;
-        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
-        await sleep(1500);
-      }
-    } catch (e) {
-      console.log("[Extension] Screenshot upload failed:", e);
-    }
-  }
+);
+
+
+await uploadImages(
+
+message.screenshots
+
+);
+
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function waitForElement(selector, timeout = 5000) {
-  return new Promise((resolve) => {
-    const el = document.querySelector(selector);
-    if (el) return resolve(el);
-
-    const observer = new MutationObserver(() => {
-      const el = document.querySelector(selector);
-      if (el) {
-        observer.disconnect();
-        resolve(el);
-      }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-    setTimeout(() => {
-      observer.disconnect();
-      resolve(null);
-    }, timeout);
-  });
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+);
+
+
+
+async function openPostModal(){
+
+
+const btn =
+
+document.querySelector(
+
+'[aria-label="Start a post"]'
+
+);
+
+
+if(!btn){
+
+console.log(
+
+"No start button"
+
+);
+
+return false;
+
 }
 
-function base64ToBlob(base64, mimeType) {
-  const byteString = atob(base64.split(",")[1] || base64);
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ab], { type: mimeType });
+
+btn.click();
+
+
+await sleep(
+
+3000
+
+);
+
+
+return true;
+
 }
 
-function showLinkedInToast(message) {
-  const existing = document.getElementById("lc-ext-toast");
-  if (existing) existing.remove();
 
-  const toast = document.createElement("div");
-  toast.id = "lc-ext-toast";
-  toast.textContent = message;
-  toast.style.cssText = `
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    background: #0a66c2;
-    color: white;
-    border-radius: 8px;
-    padding: 14px 20px;
-    font-size: 14px;
-    font-family: 'Segoe UI', sans-serif;
-    z-index: 999999;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    max-width: 320px;
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 5000);
+
+async function fillPost(post){
+
+
+for(
+
+let i=0;
+
+i<20;
+
+i++
+
+){
+
+const root =
+
+document.querySelector(
+
+'[data-testid="interop-shadowdom"]'
+
+);
+
+
+if(root){
+
+const editor =
+
+root.shadowRoot.querySelector(
+
+'.ql-editor'
+
+);
+
+
+if(editor){
+
+console.log("POST RECEIVED");
+console.log(post);
+console.log(typeof post);
+console.log(post?.length);
+editor.focus();
+
+console.log(editor.innerHTML);
+editor.textContent =
+post;
+
+editor.innerHTML =
+post
+.split("\n")
+.map(line => `<p>${line || "<br>"}</p>`)
+.join("");
+
+console.log(
+"After insertion:"
+);
+
+console.log(
+editor.innerHTML
+);
+
+editor.dispatchEvent(
+
+new InputEvent(
+
+"input",
+
+{
+bubbles:true
+}
+
+)
+
+);
+
+await sleep(1000);
+
+console.log(
+
+"After 1 sec"
+
+);
+
+console.log(
+
+editor.innerHTML
+
+);
+
+
+
+editor.dispatchEvent(
+
+new Event(
+
+"change",
+
+{
+
+bubbles:true
+
+}
+
+)
+
+);
+
+
+
+return true;
+
+}
+
+}
+
+
+await sleep(
+
+500
+
+);
+
+}
+
+
+return false;
+
+}
+
+
+
+async function uploadImages(
+
+screenshots
+
+){
+
+
+const root =
+
+document.querySelector(
+
+'[data-testid="interop-shadowdom"]'
+
+);
+
+
+
+const mediaBtn =
+
+root.shadowRoot.querySelector(
+
+'button[aria-label="Add media"]'
+
+);
+
+
+
+mediaBtn.click();
+
+
+console.log(
+
+"Media clicked"
+
+);
+
+
+
+let fileInput =
+
+null;
+
+
+
+for(
+
+let i=0;
+
+i<20;
+
+i++
+
+){
+
+fileInput =
+
+root.shadowRoot.querySelector(
+
+'input[type="file"]'
+
+);
+
+
+if(
+
+fileInput
+
+){
+
+break;
+
+}
+
+
+await sleep(
+
+500
+
+);
+
+}
+
+
+
+if(
+
+!fileInput
+
+){
+
+console.log(
+
+"No file input"
+
+);
+
+return;
+
+}
+
+
+
+console.log(
+
+"Input found"
+
+);
+
+
+
+const dt =
+
+new DataTransfer();
+
+
+
+for(
+
+let i=0;
+
+i<screenshots.length;
+
+i++
+
+){
+
+
+const file =
+
+dataURLtoFile(
+
+screenshots[i],
+
+`shot${i}.png`
+
+);
+
+
+
+dt.items.add(
+
+file
+
+);
+
+
+}
+
+
+
+fileInput.files =
+
+dt.files;
+
+
+
+fileInput.dispatchEvent(
+
+new Event(
+
+"input",
+
+{
+
+bubbles:true
+
+}
+
+)
+
+);
+
+
+
+fileInput.dispatchEvent(
+
+new Event(
+
+"change",
+
+{
+
+bubbles:true
+
+}
+
+)
+
+);
+
+
+
+fileInput.dispatchEvent(
+
+new Event(
+
+"blur",
+
+{
+
+bubbles:true
+
+}
+
+)
+
+);
+
+
+
+fileInput.dispatchEvent(
+
+new Event(
+
+"focus",
+
+{
+
+bubbles:true
+
+}
+
+)
+
+);
+
+
+
+console.log(
+
+"Images uploaded"
+
+);
+
+}
+
+
+
+function dataURLtoFile(
+
+dataurl,
+
+filename
+
+){
+
+const arr =
+
+dataurl.split(",");
+
+
+const mime =
+
+arr[0]
+
+.match(
+
+/:(.*?);/
+
+)[1];
+
+
+const bstr =
+
+atob(
+
+arr[1]
+
+);
+
+
+let n =
+
+bstr.length;
+
+
+const u8arr =
+
+new Uint8Array(
+
+n
+
+);
+
+
+while(
+
+n--
+
+){
+
+u8arr[n] =
+
+bstr.charCodeAt(
+
+n
+
+);
+
+}
+
+
+return new File(
+
+[u8arr],
+
+filename,
+
+{
+
+type:mime
+
+}
+
+);
+
+}
+
+
+
+function sleep(ms){
+
+return new Promise(
+
+resolve=>
+
+setTimeout(
+
+resolve,
+
+ms
+
+)
+
+);
+
 }

@@ -25,6 +25,27 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     return true;
   }
+   if(message.type === "FILL_LINKEDIN"){
+
+      openLinkedInPost()
+    .then(() => {
+
+      sendResponse({
+        success:true
+      });
+
+    })
+    .catch(err => {
+
+      sendResponse({
+        success:false,
+        error:err.message
+      });
+
+    });
+
+  return true;
+    }
  
 
 });
@@ -328,6 +349,47 @@ function waitForTabLoad(tabId) {
     chrome.tabs.onUpdated
       .addListener(listener);
   });
+}
+
+
+async function openLinkedInPost() {
+
+  const data =
+    await getStorage([
+      "generatedPost",
+      "extractedProblems"
+    ]);
+
+  const tab =
+    await chrome.tabs.create({
+
+      url:
+        "https://www.linkedin.com/feed/",
+
+      active:true
+    });
+
+  await waitForTabLoad(tab.id);
+
+  await new Promise(resolve =>
+    setTimeout(resolve, 8000)
+  );
+
+  await chrome.tabs.sendMessage(
+    tab.id,
+    {
+      type:
+        "FILL_LINKEDIN_POST",
+
+      post:
+        data.generatedPost,
+
+      screenshots:
+        data.extractedProblems.map(
+          p => p.screenshot
+        )
+    }
+  );
 }
 // ======================================================
 // STORAGE HELPERS

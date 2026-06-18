@@ -1,186 +1,446 @@
-# ⚡ LeetCode → LinkedIn Auto Post Generator
-## Complete Setup Guide (Read This First!)
+# 🚀 LeetInSync
+
+LeetLink is a Chrome Extension that automates sharing your LeetCode progress on LinkedIn.
+
+The extension extracts solved LeetCode problems, captures screenshots, generates a LinkedIn-ready post using Gemini AI, and automatically fills the LinkedIn post editor with both text and images.
 
 ---
 
-## 📁 Project Structure
+# Features
 
-```
-leetcode-linkedin-extension/
+✅ Enter LeetCode problem numbers
+
+✅ Automatically fetch problem details
+
+✅ Extract
+
+- Problem Title
+- Difficulty
+- Description
+- Your submitted code
+
+✅ Capture screenshots of solved problems
+
+✅ Generate LinkedIn posts using Gemini AI
+
+✅ Open LinkedIn automatically
+
+✅ Fill LinkedIn post content
+
+✅ Upload screenshots automatically
+
+---
+
+# Tech Stack
+
+### Frontend
+
+- HTML
+- CSS
+- JavaScript
+
+### Chrome APIs
+
+- chrome.tabs
+- chrome.storage
+- chrome.runtime
+- chrome.action
+- chrome.scripting
+
+### Backend
+
+- Node.js
+- Express.js
+
+### AI
+
+- Gemini 2.5 Flash API
+
+---
+
+# Project Structure
+
+```text
+LeetLink/
+
 │
-├── extension/              ← Chrome Extension (load this into Chrome)
-│   ├── manifest.json
-│   ├── icons/
-│   ├── popup/
-│   │   ├── popup.html
-│   │   └── popup.js
-│   ├── content/
-│   │   ├── leetcode.js
-│   │   └── linkedin.js
-│   └── background/
-│       └── background.js
+├── manifest.json
 │
-├── backend/                ← Node.js Server (run this on your computer)
+├── background/
+│   └── background.js
+│
+├── popup/
+│   ├── popup.html
+│   ├── popup.js
+│   └── popup.css
+│
+├── content_scripts/
+│   ├── leetcode.js
+│   └── linkedin.js
+│
+├── backend/
 │   ├── server.js
 │   ├── package.json
-│   └── .env.example
+│   └── .env
 │
-└── generate_icons.py       ← Helper script (already ran)
+├── assets/
+│
+└── README.md
 ```
 
 ---
 
-## 🛠️ STEP-BY-STEP SETUP
+# Installation
 
----
-
-### STEP 1 — Get an OpenAI API Key
-
-1. Go to: **https://platform.openai.com/api-keys**
-2. Sign in / create an account
-3. Click **"Create new secret key"**
-4. Copy the key (starts with `sk-...`)
-5. **Save it** — you'll need it in Step 2
-
-> ⚠️ OpenAI charges per API call. Each post generation costs ~$0.001 (less than 1 paisa). Very cheap!
-
----
-
-### STEP 2 — Set Up the Backend
-
-**Open Terminal / Command Prompt:**
+## Step 1 : Clone Repository
 
 ```bash
-# 1. Go to the backend folder
-cd path/to/leetcode-linkedin-extension/backend
+git clone <repository-url>
 
-# 2. Create the .env file
-cp .env.example .env
+cd LeetLink
 ```
 
-**Now open the `.env` file in any text editor (Notepad, VS Code, etc.):**
+---
 
+## Step 2 : Install Backend Dependencies
+
+Move into backend folder
+
+```bash
+cd backend
 ```
-OPENAI_API_KEY=sk-your-actual-key-here
-PORT=3000
-```
 
-Replace `sk-your-actual-key-here` with the key you got in Step 1.
-
-**Install dependencies:**
+Install packages
 
 ```bash
 npm install
 ```
 
-**Start the backend:**
+---
+
+## Step 3 : Create .env file
+
+Inside backend folder create
+
+```text
+.env
+```
+
+Add your Gemini API Key
+
+```env
+GEMINI_API_KEY=YOUR_API_KEY_HERE
+```
+
+Example
+
+```env
+GEMINI_API_KEY=AIzaSyxxxxxxxxxxxxxxxxxxxx
+```
+
+---
+
+# Getting Gemini API Key
+
+Visit
+
+https://aistudio.google.com/
+
+Create an API Key
+
+Copy it
+
+Paste it inside
+
+```env
+GEMINI_API_KEY=
+```
+
+---
+
+# Running Backend Server
+
+Inside backend folder
 
 ```bash
 node server.js
 ```
 
-You should see:
+Server should start successfully
+
+```text
+✅ Backend running on http://localhost:3000
 ```
-✅ LeetCode LinkedIn Generator Backend
-🚀 Running at http://localhost:3000
+
+Keep this terminal running.
+
+---
+
+# Loading Chrome Extension
+
+Open Chrome
+
+Go to
+
+```text
+chrome://extensions/
 ```
 
-> 🔴 IMPORTANT: Keep this terminal window open while using the extension!
+Enable
+
+```text
+Developer Mode
+```
+
+Click
+
+```text
+Load unpacked
+```
+
+Select
+
+```text
+LeetInSync
+```
+
+Extension is now installed.
 
 ---
 
-### STEP 3 — Load the Chrome Extension
+# How To Use
 
-1. Open **Google Chrome**
-2. Go to: `chrome://extensions/`
-3. Turn ON **"Developer mode"** (toggle in top-right corner)
-4. Click **"Load unpacked"**
-5. Select the **`extension`** folder inside your project
-6. You'll see the extension appear with an icon in Chrome's toolbar
 
-> If you don't see the icon, click the puzzle piece 🧩 icon in Chrome toolbar and pin it.
+### Step 1
 
----
+Open LeetCode
 
-### STEP 4 — Using the Extension
+Solve problems
 
-#### Before solving problems:
-
-1. Click the extension icon in Chrome toolbar
-2. Select your **Challenge type** (Striver/Blind 75/NeetCode 150)
-3. Enter the **Day number** (e.g., Day 12) and **Total days** (e.g., 45)
-4. Enter **Problem 1, 2, 3** LeetCode numbers (e.g., 1, 2, 3)
-5. Click **"Save & Start Monitoring"**
-
-#### Now solve the problems:
-
-1. Go to LeetCode.com
-2. Solve Problem 1 → Submit → Get "Accepted"
-3. The extension automatically detects it! (You'll see a toast notification)
-4. Solve Problem 2 → Submit → Get "Accepted"
-5. Solve Problem 3 → Submit → Get "Accepted"
-6. The extension popup will show all 3 as ✅
-
-#### Generate the post:
-
-1. Click the extension icon
-2. Click **"Generate LinkedIn Post"**
-3. Wait 5-10 seconds for AI to generate
-4. You'll see a preview of the post
-
-#### Fill LinkedIn:
-
-1. Click **"Fill LinkedIn Post"**
-2. If LinkedIn isn't open, it opens automatically
-3. On LinkedIn, click **"Start a post"**
-4. Come back to extension, click **"Fill LinkedIn Post"** again
-5. The text gets auto-filled in LinkedIn!
-6. Review the post
-7. Click **"Post"** on LinkedIn
 
 ---
 
-## ❓ Troubleshooting
+### Step 2
 
-### "Error: Is your backend running on port 3000?"
-→ Make sure you ran `node server.js` in the backend folder and it's still running.
+Open Extension
 
-### "Please click Start a post on LinkedIn first"
-→ Go to LinkedIn feed, click "Start a post" to open the composer, then try again.
 
-### Extension not detecting solved problems?
-→ Make sure you clicked "Save & Start Monitoring" BEFORE solving the problems.
-→ Try refreshing the LeetCode page after saving problems.
+Enter
 
-### OpenAI error?
-→ Check your `.env` file has the correct API key.
-→ Make sure you have billing set up at platform.openai.com
 
-### Extension not showing?
-→ Go to chrome://extensions and make sure it's enabled (toggle is blue).
+```text
+Problem 1 Number
+
+Problem 2 Number
+
+Problem 3 Number
+```
+
+
+Example
+
+
+```text
+1
+
+2
+
+3
+```
+
+
+Choose
+
+
+```text
+Challenge Type
+
+Day Number
+
+Total Days
+```
+
+
+Example
+
+
+```text
+Challenge Type
+
+Striver
+
+
+Day
+
+1
+
+
+Total Days
+
+45
+```
+
 
 ---
 
-## 🔧 Customizing the Post Format
+### Step 3
 
-To change how the AI generates posts, edit `backend/server.js`:
 
-- Find the `buildPrompt` function
-- Edit the instructions inside to change tone, format, hashtags, etc.
+Click
+
+
+```text
+Fetch Problems
+```
+
+
+Extension automatically
+
+
+✔ Opens LeetCode pages
+
+
+✔ Extracts descriptions
+
+
+✔ Extracts code
+
+
+✔ Captures screenshots
+
+
+✔ Stores extracted data
+
 
 ---
 
-## 💡 Tips
+### Step 4
 
-- The extension works while you browse — no need to keep it open
-- Progress is saved in Chrome's local storage (survives browser restarts)
-- Click "Reset All Data" in the extension to start fresh for a new day
-- For best results, solve all problems in one sitting
+
+Click
+
+
+```text
+Generate Post
+```
+
+
+Gemini generates a LinkedIn-ready post.
+
+
+Preview appears inside extension.
+
 
 ---
 
-## 📊 Cost Estimate
+### Step 5
 
-Using `gpt-4o-mini` model:
-- ~1 post generation = ~800 tokens = ~$0.0001
-- 45 days of Striver SDE = ~$0.005 total (less than 50 paisa!)
+
+Click
+
+
+```text
+Fill LinkedIn
+```
+
+
+Extension automatically
+
+
+✔ Opens LinkedIn
+
+
+✔ Opens post editor
+
+
+✔ Inserts generated text
+
+
+✔ Uploads screenshots
+
+
+---
+
+# Required Permissions
+
+
+Manifest requires
+
+
+```json
+"permissions": [
+
+"tabs",
+
+"storage",
+
+"activeTab",
+
+"scripting"
+
+]
+```
+
+
+Host permissions
+
+
+```json
+"host_permissions": [
+
+"https://leetcode.com/*",
+
+"https://www.linkedin.com/*"
+
+]
+```
+
+
+---
+
+# Notes
+
+
+Keep backend server running while using the extension.
+
+
+LinkedIn UI changes frequently.
+
+
+Selectors inside
+
+
+```text
+linkedin.js
+```
+
+
+may require updates in future.
+
+
+---
+
+# Author
+
+
+### P V Siva Rama Sastry
+
+CSE (AI & ML)
+
+Gayatri Vidya Parishad College of Engineering
+
+Visakhapatnam
+
+
+---
+
+# Future Improvements
+
+
+- Support any number of problems
+- Support Codeforces
+- Support CodeChef
+- One-click LinkedIn publishing
+- Custom post templates
+- Dark mode support
+- Scheduling LinkedIn posts

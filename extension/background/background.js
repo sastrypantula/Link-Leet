@@ -1,5 +1,23 @@
 "use strict";
+chrome.action.onClicked.addListener(() => {
 
+    chrome.windows.create({
+
+        url: chrome.runtime.getURL(
+
+            "popup/popup.html"
+
+        ),
+
+        type: "popup",
+
+        width: 500,
+
+        height: 800
+
+    });
+
+});
 // ======================================================
 // MESSAGE LISTENER
 // ======================================================

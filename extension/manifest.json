@@ -31,7 +31,7 @@
     }
   ],
   "action": {
-    "default_popup": "popup/popup.html",
+  "default_title": "LeetInk",
     "default_icon": {
       "16": "icons/icon1.png"
     }

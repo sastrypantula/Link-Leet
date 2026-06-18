@@ -419,7 +419,12 @@ linkedin.js
 ```
 
 
-may require updates in future.
+
+# ❤️ Developed By
+
+**Sivaramasastry Pantula**
+
+© All Rights Reserved
 
 ---
 

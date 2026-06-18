@@ -1,4 +1,4 @@
-# 🚀 LeetInSync
+# 🚀 Leet-Link
 
 LeetLink is a Chrome Extension that automates sharing your LeetCode progress on LinkedIn.
 
@@ -55,6 +55,10 @@ The extension extracts solved LeetCode problems, captures screenshots, generates
 ### AI
 
 - Gemini 2.5 Flash API
+
+### API
+GraphQL
+RESTAPI
 
 ---
 
@@ -201,7 +205,7 @@ Load unpacked
 Select
 
 ```text
-LeetInSync
+LeetLink
 ```
 
 Extension is now installed.
@@ -417,30 +421,5 @@ linkedin.js
 
 may require updates in future.
 
-
 ---
 
-# Author
-
-
-### P V Siva Rama Sastry
-
-CSE (AI & ML)
-
-Gayatri Vidya Parishad College of Engineering
-
-Visakhapatnam
-
-
----
-
-# Future Improvements
-
-
-- Support any number of problems
-- Support Codeforces
-- Support CodeChef
-- One-click LinkedIn publishing
-- Custom post templates
-- Dark mode support
-- Scheduling LinkedIn posts

@@ -5,11 +5,7 @@ chrome.runtime.onMessage.addListener(
 
 async message=>{
 
-if(
-
-message.type==="FILL_LINKEDIN_POST"
-
-){
+if(message.type==="FILL_LINKEDIN_POST"){
 
 console.log("FILLING POST");
 
@@ -20,22 +16,14 @@ await openPostModal();
 
 if(!opened){
 
-console.log(
-
-"Cannot open modal"
-
-);
-
+console.log("Cannot open modal");
 return;
-
 }
 
 
 const inserted =
 await fillPost(
-
 message.post
-
 );
 
 
@@ -59,12 +47,28 @@ console.log(
 );
 
 
-await uploadImages(
+await uploadImages(message.screenshots);
+console.log("Images uploaded");
 
-message.screenshots
-
+await sleep(3000);
+const root =
+document.querySelector(
+'[data-testid="interop-shadowdom"]'
+);
+const nextBtn =
+root?.shadowRoot?.querySelector(
+'button[aria-label="Next"]'
 );
 
+console.log("NEXT BTN =", nextBtn);
+
+if(nextBtn){
+
+nextBtn.click();
+
+console.log("Clicked next");
+
+}
 }
 
 }
@@ -76,22 +80,12 @@ message.screenshots
 async function openPostModal(){
 
 
-const btn =
-
-document.querySelector(
-
-'[aria-label="Start a post"]'
-
-);
+const btn =document.querySelector('[aria-label="Start a post"]');
 
 
 if(!btn){
 
-console.log(
-
-"No start button"
-
-);
+console.log("No start button");
 
 return false;
 
@@ -101,13 +95,7 @@ return false;
 btn.click();
 
 
-await sleep(
-
-3000
-
-);
-
-
+await sleep(3000);
 return true;
 
 }
@@ -116,48 +104,22 @@ return true;
 
 async function fillPost(post){
 
+for(let i=0;i<20;i++){
 
-for(
-
-let i=0;
-
-i<20;
-
-i++
-
-){
-
-const root =
-
-document.querySelector(
-
-'[data-testid="interop-shadowdom"]'
-
-);
-
-
+const root =document.querySelector('[data-testid="interop-shadowdom"]');
 if(root){
 
-const editor =
-
-root.shadowRoot.querySelector(
-
-'.ql-editor'
-
-);
-
-
+const editor =root.shadowRoot.querySelector('.ql-editor');
 if(editor){
 
-console.log("POST RECEIVED");
-console.log(post);
-console.log(typeof post);
-console.log(post?.length);
+// console.log("POST RECEIVED");
+// console.log(post);
+
+// console.log(post?.length);
 editor.focus();
 
-console.log(editor.innerHTML);
-editor.textContent =
-post;
+// console.log(editor.innerHTML);
+editor.textContent =post;
 
 editor.innerHTML =
 post
@@ -165,13 +127,9 @@ post
 .map(line => `<p>${line || "<br>"}</p>`)
 .join("");
 
-console.log(
-"After insertion:"
-);
+// console.log("After insertion:");
 
-console.log(
-editor.innerHTML
-);
+// console.log(editor.innerHTML);
 
 editor.dispatchEvent(
 
@@ -228,11 +186,7 @@ return true;
 }
 
 
-await sleep(
-
-500
-
-);
+await sleep(500);
 
 }
 
@@ -274,28 +228,16 @@ mediaBtn.click();
 
 
 console.log(
-
 "Media clicked"
-
 );
 
 
 
-let fileInput =
-
-null;
+let fileInput =null;
 
 
 
-for(
-
-let i=0;
-
-i<20;
-
-i++
-
-){
+for(let i=0;i<20;i++){
 
 fileInput =
 
@@ -306,38 +248,22 @@ root.shadowRoot.querySelector(
 );
 
 
-if(
-
-fileInput
-
-){
+if(fileInput){
 
 break;
 
 }
 
 
-await sleep(
-
-500
-
-);
+await sleep(500);
 
 }
 
 
 
-if(
+if(!fileInput){
 
-!fileInput
-
-){
-
-console.log(
-
-"No file input"
-
-);
+console.log("No file input");
 
 return;
 
@@ -345,34 +271,18 @@ return;
 
 
 
-console.log(
-
-"Input found"
-
-);
+console.log("Input found");
 
 
 
-const dt =
-
-new DataTransfer();
+const dt =new DataTransfer();
 
 
 
-for(
-
-let i=0;
-
-i<screenshots.length;
-
-i++
-
-){
+for(let i=0;i<screenshots.length;i++){
 
 
-const file =
-
-dataURLtoFile(
+const file =dataURLtoFile(
 
 screenshots[i],
 
@@ -508,7 +418,6 @@ arr[0]
 const bstr =
 
 atob(
-
 arr[1]
 
 );

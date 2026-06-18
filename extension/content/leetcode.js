@@ -109,22 +109,7 @@ if(difficultyElement){
   result.difficulty =
     difficultyElement.textContent.trim();
 }
-   // Language
 
-// const buttons =
-//   document.querySelectorAll(
-//     'button[aria-haspopup="dialog"]'
-//   );
-
-// if(buttons.length > 1){
-
-//   result.language =
-//     buttons[1].textContent.trim();
-// }
-// console.log(
-//   "LANGUAGE =",
-//   result.language
-// );
 // Code
 
 const lines =

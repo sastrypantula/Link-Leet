@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LeetCode → LinkedIn Auto Post",
+  "name": "LeetCode → LinkedIn Auto Post Generator",
   "version": "2.0.0",
   "description": "Auto-capture LeetCode split-screen screenshots and generate LinkedIn challenge posts",
   "permissions": [
@@ -33,9 +33,7 @@
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/icon1.png"
     }
   }
 }

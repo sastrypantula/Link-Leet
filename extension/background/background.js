@@ -303,13 +303,13 @@ await new Promise(resolve =>
 const verify =
   await getStorage(["extractedProblems"]);
 
-console.log(
-  "VERIFY STORAGE",
-  verify.extractedProblems
-);
-console.log(
-  verify.extractedProblems[0].screenshot
-);
+// console.log(
+//   "VERIFY STORAGE",
+//   verify.extractedProblems
+// );
+// console.log(
+//   verify.extractedProblems[0].screenshot
+// );
 }
 
 async function captureScreenshot(windowId) {

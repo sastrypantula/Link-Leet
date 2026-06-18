@@ -4,8 +4,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const { GoogleGenAI } =
-  require("@google/genai");
+const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -109,8 +108,7 @@ app.post("/generate-post", async (req, res) => {
 
   });
 
-const post =
-  result.text;
+const post =result.text;
 
     res.json({
 
@@ -206,7 +204,7 @@ IMPORTANT:
 
 Output format:
 
-🚀 Day ${dayNum} of #${challengeType}
+🚀 Day ${dayNum}/${totalDays} of #${challengeType}
 
 Today's session focused on important DSA concepts.
 
@@ -240,31 +238,8 @@ Why it works:
 
 [1-2 lines]
 
-✅ Problem Name
 
-Key Observation:
-
-[2-3 lines]
-
-Approach Used:
-
-[2-3 lines]
-
-Why it works:
-
-[1-2 lines]
-
-💡 Today's Learnings
-
-🔹 Learning 1
-
-🔹 Learning 2
-
-🔹 Learning 3
-
-🔹 Learning 4
-
-One short concluding paragraph.
+Mention the time and space complexities of respective problem.
 
 Day ${dayNum}/${totalDays} ✅
 
@@ -274,10 +249,10 @@ STRICT RULES:
 
 * Total post must stay under 500 words.
 * Keep the entire post suitable for LinkedIn.
-* Avoid long essays.
+* Avoid long essays. Dont give more explanations just two lines inhalf ok .
 * Avoid repeating the problem statement.
 * Explain the user's solution, not the optimal solution if they are different.
-
+At last mention some tags like #leetcode #DSA #striver 
 these are the problems ${problemsText}
 `
 }

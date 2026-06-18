@@ -143,10 +143,7 @@ async function generatePost() {
   setStatus("Generating LinkedIn post...");
 
   try{
-    console.log(
-  "Sending to backend",
-  data
-);
+    console.log("Sending to backend", data);
 
     const res = await fetch(`${BACKEND}/generate-post`,{
 
@@ -184,7 +181,7 @@ async function generatePost() {
 
     $("btnLinkedIn").disabled = false;
 
-    setStatus("Post generated");
+    setStatus("Post generated Successfully");
 
   }catch(err){
 

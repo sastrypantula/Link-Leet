@@ -427,7 +427,9 @@ linkedin.js
 © All Rights Reserved
 
 ---
-#Demo Video
 
-<video controls src="LeetLink_DEMO.mp4" title="Title"></video>
+## 🎥 Demo Video
+
+[Watch Demo](LeetLink_DEMO.mp4)
+
 

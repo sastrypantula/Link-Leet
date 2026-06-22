@@ -430,6 +430,6 @@ linkedin.js
 
 ## 🎥 Demo Video
 
-[Watch Demo](LeetLink_DEMO.mp4)
+[(LeetLink_DEMO.mp4)](https://youtu.be/IHj_lkdveSA)
 
 
